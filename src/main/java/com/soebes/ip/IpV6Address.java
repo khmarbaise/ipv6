@@ -41,9 +41,13 @@ public final class IpV6Address {
     this.tuples = tuples;
   }
 
+  private IpV6Address(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8) {
+    this.tuples = new int[]{t1, t2, t3, t4, t5, t6, t7, t8};
+  }
 
-  public static final IpV6Address LOOPBACK_ADDRESS = IpV6Address.from("0:0:0:0:0:0:0:1");
-  public static final IpV6Address UNSPECIFIED_ADDRESS = IpV6Address.from("0:0:0:0:0:0:0:0");
+
+  public static final IpV6Address LOOPBACK_ADDRESS = new IpV6Address(0,0,0,0,0,0,0,1);
+  public static final IpV6Address UNSPECIFIED_ADDRESS = new IpV6Address(0,0,0,0,0,0,0,0);
 
   public boolean isUnicastAddress() {
     return false;
