@@ -23,6 +23,7 @@ import org.apiguardian.api.API;
 import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.joining;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
@@ -97,9 +98,15 @@ the decimal values of the four low-order 8-bit pieces of the
     return new IpV6Address(digits);
   }
 
+  private static Predicate<Integer> isXX = s -> s.intValue() < 0 && s.intValue() > 0xffff;
+
   public static IpV6Address from(int[] ip6) {
     if (ip6.length != 8) {
       throw new IllegalArgumentException("There must be eight components.");
+    }
+    var invalidRange = Arrays.stream(ip6).boxed().noneMatch(isXX);
+    if (invalidRange) {
+
     }
     return new IpV6Address(ip6);
   }
