@@ -92,6 +92,14 @@ class IpV6AddressTest {
     }
 
     @Test
+    void invalid_3() {
+      int[] tuples = {0, 0, 0, 0, 0, 0, 0x10000};
+      assertThatIllegalArgumentException()
+          .isThrownBy(() -> IpV6Address.from(tuples))
+          .withMessage("There must be eight components.");
+    }
+
+    @Test
     void validation_2() {
       int[] tuples = {0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff};
       assertThatCode(() -> IpV6Address.from(tuples)).doesNotThrowAnyException();
