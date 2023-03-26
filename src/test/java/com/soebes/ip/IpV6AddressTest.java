@@ -20,6 +20,8 @@ package com.soebes.ip;
 
 import org.junit.jupiter.api.Test;
 
+import static com.soebes.ip.IpV6Address.LOOPBACK_ADDRESS;
+import static com.soebes.ip.IpV6Address.UNSPECIFIED_ADDRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class IpV6AddressTest {
@@ -30,7 +32,7 @@ class IpV6AddressTest {
 
     var resultingIpV6 = IpV6Address.from(givenIpV6);
 
-    assertThat(resultingIpV6).isEqualTo(IpV6Address.LOOPBACK_ADDRESS);
+    assertThat(resultingIpV6).isEqualTo(LOOPBACK_ADDRESS);
   }
 
   @Test
@@ -39,7 +41,7 @@ class IpV6AddressTest {
 
     var resultingIpV6 = IpV6Address.from(givenIpV6);
 
-    assertThat(resultingIpV6).isEqualTo(IpV6Address.UNSPECIFIED_ADDRESS);
+    assertThat(resultingIpV6).isEqualTo(UNSPECIFIED_ADDRESS);
   }
 
   @Test
