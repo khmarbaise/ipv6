@@ -25,30 +25,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 class IpV6AddressTest {
 
   @Test
-  void loop_back_ip_address() {
-    String loopBack = "0:0:0:0:0:0:0:1";
-    var loop = IpV6Address.from(loopBack);
-    assertThat(loop).isEqualTo(IpV6Address.LOOPBACK_ADDRESS);
-    System.out.println("ip6Address = " + loop);
+  void given_loop_back_address() {
+    String givenIpV6 = "0:0:0:0:0:0:0:1";
 
+    var resultingIpV6 = IpV6Address.from(givenIpV6);
+
+    assertThat(resultingIpV6).isEqualTo(IpV6Address.LOOPBACK_ADDRESS);
   }
 
   @Test
   void first_basic_conversion() {
-    String ipv6 = "ABCD:EF01:2345:6789:ABCD:EF01:2345:6789";
-    var ip6Address = IpV6Address.from(ipv6);
-    assertThat(ip6Address.toString()).hasToString(ipv6);
-    System.out.println("ip6Address = " + ip6Address);
+    String givenIPAsString = "ABCD:EF01:2345:6789:ABCD:EF01:2345:6789";
+
+    var ip6Address = IpV6Address.from(givenIPAsString);
+
+    assertThat(ip6Address).hasToString(givenIPAsString);
   }
 
   @Test
   void convertion() {
-    String ipv6 = "FFF8:FFF9:FFFA:FFFB:FFFC:FFFD:FFFE:FFFF";
-    var ip6Address = IpV6Address.from(ipv6);
-    assertThat(ip6Address.toString()).hasToString(ipv6);
-    System.out.println("ip6Address = " + ip6Address);
-  }
+    String givenIPAsString = "FFF8:FFF9:FFFA:FFFB:FFFC:FFFD:FFFE:FFFF";
 
+    var ip6Address = IpV6Address.from(givenIPAsString);
+
+    assertThat(ip6Address).hasToString(givenIPAsString);
+  }
 
 
 }
