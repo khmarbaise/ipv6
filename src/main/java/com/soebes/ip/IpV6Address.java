@@ -86,9 +86,22 @@ the decimal values of the four low-order 8-bit pieces of the
    */
 
   /**
-   * @param ip6 String representing the IPV6 address.
+   * @param ip6 String representing of an IP V6 address.
    * @return Instance of the {@link IpV6Address}
    */
+  //1. check the content of the string... valid "0-9A-Fa-f", ".", ":", "::", "/" ?
+  //      2001:0DB8:0000:CD30:0000:0000:0000:0000/60
+  //      2001:0DB8::CD30:0:0:0:0/60
+  //      2001:0DB8:0:CD30::/60
+  //
+  //      2001:0DB8:0:CD3/60   may drop leading zeros, but not trailing
+  //                           zeros, within any 16-bit chunk of the address
+  //
+  //      2001:0DB8::CD30/60   address to left of "/" expands to
+  //                           2001:0DB8:0000:0000:0000:0000:0000:CD30
+  //
+  //      2001:0DB8::CD3/60    address to left of "/" expands to
+  //                           2001:0DB8:0000:0000:0000:0000:0000:0CD3
   public static IpV6Address from(String ip6) {
     var ipTuples = ip6.split(":");
     int[] digits = new int[8];

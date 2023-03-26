@@ -22,6 +22,7 @@ Just an idea.
 
 * https://datatracker.ietf.org/doc/html/rfc4291[IP Version 6 Addressing Architecture]
 * https://datatracker.ietf.org/doc/html/rfc5952[A Recommendation for IPv6 Address Text Representation]
+* https://datatracker.ietf.org/doc/html/rfc4038[Application Aspects of IPv6 Transition]
 
 It's just a Proof Of Concept
 

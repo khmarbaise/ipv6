@@ -65,6 +65,80 @@ class IpV6AddressTest {
     assertThat(ip6Address).hasToString(givenIPAsString);
   }
 
+  @Nested
+  class ConversionWithXX {
+    @Test
+    void conversion_with_ip4_1() {
+      String givenIPAsString = "0:0:0:0:0:0:13.1.68.3";
+
+      var ip6Address = IpV6Address.from(givenIPAsString);
+
+      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403"); // ??
+
+      /*
+       0:0:0:0:0:0:13.1.68.3
+
+         0:0:0:0:0:FFFF:129.144.52.38
+
+      or in compressed form:
+
+         ::13.1.68.3
+
+         ::FFFF:129.144.52.38
+
+       */
+    }
+  }
+
+  @Nested
+  class ConversionWithDoubleColon {
+
+    @Test
+    void conversion_with_double_colon_1() {
+      String givenIPAsString = "2001:DB8::8:800:200C:417A";
+
+      var ip6Address = IpV6Address.from(givenIPAsString);
+
+      assertThat(ip6Address).hasToString("2001:0DB8:0000:0000:0008:0800:200C:417A");
+    }
+
+    @Test
+    void conversion_with_double_colon_2() {
+      String givenIPAsString = "FF01::101";
+
+      var ip6Address = IpV6Address.from(givenIPAsString);
+
+      assertThat(ip6Address).hasToString("FF01:0000:0000:0000:0000:0000:0000:0101");
+    }
+
+    @Test
+    void conversion_with_double_colon_3() {
+      String givenIPAsString = "::1";
+
+      var ip6Address = IpV6Address.from(givenIPAsString);
+
+      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0000:0001");
+    }
+
+    @Test
+    void conversion_with_double_colon_4() {
+      String givenIPAsString = "::";
+
+      var ip6Address = IpV6Address.from(givenIPAsString);
+
+      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0000:0000");
+    }
+
+    @Test
+    void conversion_with_double_colon_5() {
+      String givenIPAsString = "::13.1.68.3";
+
+      var ip6Address = IpV6Address.from(givenIPAsString);
+
+      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403");
+    }
+
+  }
 
   @Nested
   class FromForInt {
