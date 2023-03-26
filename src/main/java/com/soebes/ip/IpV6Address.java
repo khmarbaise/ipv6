@@ -111,9 +111,11 @@ the decimal values of the four low-order 8-bit pieces of the
   //
   //      2001:0DB8::CD3/60    address to left of "/" expands to
   //                           2001:0DB8:0000:0000:0000:0000:0000:0CD3
-  public static IpV6Address from(String ip6) {
-    var ipTuples = ip6.split(":");
-    int[] digits = new int[8];
+  private static String ZERO_ABBREVIATION = "::";
+
+  private static int[] convert(String x) {
+    var ipTuples = x.split(":");
+    int[] digits = new int[ipTuples.length];
     for (int i = 0; i < ipTuples.length; i++) {
       digits[i] = HexFormat.fromHexDigits(ipTuples[i]);
       var isValid = digits[i] >= 0 && digits[i] <= 65535;
@@ -121,7 +123,36 @@ the decimal values of the four low-order 8-bit pieces of the
         throw new IllegalArgumentException("The valid range from 0...65535 is violated for [" + i + "]=" + ipTuples[i]);
       }
     }
-    return new IpV6Address(digits);
+    return digits;
+  }
+
+  public static IpV6Address from(String ip6) {
+    var split = ip6.split(ZERO_ABBREVIATION);
+
+    if (split.length > 1) {
+      System.out.println("split = " + split);
+
+      int[] result = new int[8];
+
+      int[] digits_first = convert(split[0]);
+      int[] digits_second = convert(split[1]);
+
+      int pos = 7;
+      for (int i = digits_second.length-1; i >=0; i--) {
+        result[pos--] = digits_second[i];
+      }
+
+      pos = pos - Math.abs(digits_second.length - digits_first.length);
+      for (int i = digits_first.length-1; i >=0; i--) {
+        result[pos--] = digits_first[i];
+      }
+
+      return new IpV6Address(result);
+    } else {
+      int[] digits = convert(ip6);
+      return new IpV6Address(digits);
+    }
+
   }
 
   private static Predicate<Integer> isGreaterOrEqualsZero = s -> s >= 0;
