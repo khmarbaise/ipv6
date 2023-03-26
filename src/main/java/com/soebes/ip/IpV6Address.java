@@ -127,24 +127,26 @@ the decimal values of the four low-order 8-bit pieces of the
   }
 
   public static IpV6Address from(String ip6) {
+    if (ip6.equals(ZERO_ABBREVIATION)) {
+      return IpV6Address.UNSPECIFIED_ADDRESS;
+    }
+
     var split = ip6.split(ZERO_ABBREVIATION);
 
     if (split.length > 1) {
-      System.out.println("split = " + split);
-
       int[] result = new int[8];
 
-      int[] digits_first = convert(split[0]);
-      int[] digits_second = convert(split[1]);
+      int[] digitsFirst = convert(split[0]);
+      int[] digitsSecond = convert(split[1]);
 
       int pos = 7;
-      for (int i = digits_second.length-1; i >=0; i--) {
-        result[pos--] = digits_second[i];
+      for (int i = digitsSecond.length-1; i >=0; i--) {
+        result[pos--] = digitsSecond[i];
       }
 
-      pos = pos - (8 - digits_second.length - digits_first.length);
-      for (int i = digits_first.length-1; i >=0; i--) {
-        result[pos--] = digits_first[i];
+      pos -= (8 - digitsSecond.length - digitsFirst.length);
+      for (int i = digitsFirst.length-1; i >=0; i--) {
+        result[pos--] = digitsFirst[i];
       }
 
       return new IpV6Address(result);
@@ -169,10 +171,6 @@ the decimal values of the four low-order 8-bit pieces of the
     }
 
     return new IpV6Address(ip6);
-  }
-
-  public int[] q() {
-    return tuples;
   }
 
   @Override

@@ -83,19 +83,24 @@ class IpV6AddressTest {
       var ip6Address = IpV6Address.from(givenIPAsString);
 
       assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403"); // ??
+    }
 
-      /*
-       0:0:0:0:0:0:13.1.68.3
+    @Test
+    void conversion_with_ip4_2() {
+      String givenIPAsString = "::13.1.68.3";
 
-         0:0:0:0:0:FFFF:129.144.52.38
+      var ip6Address = IpV6Address.from(givenIPAsString);
 
-      or in compressed form:
+      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403"); // ??
+    }
 
-         ::13.1.68.3
+    @Test
+    void conversion_with_ip4_3() {
+      String givenIPAsString = "::FFFF:129.144.52.38";
 
-         ::FFFF:129.144.52.38
+      var ip6Address = IpV6Address.from(givenIPAsString);
 
-       */
+      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403"); // ??
     }
   }
 
