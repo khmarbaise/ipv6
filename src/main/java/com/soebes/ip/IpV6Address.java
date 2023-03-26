@@ -142,7 +142,7 @@ the decimal values of the four low-order 8-bit pieces of the
         result[pos--] = digits_second[i];
       }
 
-      pos = pos - Math.abs(digits_second.length - digits_first.length);
+      pos = pos - (8 - digits_second.length - digits_first.length);
       for (int i = digits_first.length-1; i >=0; i--) {
         result[pos--] = digits_first[i];
       }
