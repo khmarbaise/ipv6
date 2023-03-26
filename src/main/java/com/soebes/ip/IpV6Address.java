@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package com.soebes.ip;
 
 import java.util.Arrays;
@@ -6,10 +24,10 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.joining;
 
-public final class Ip6Address {
+public final class IpV6Address {
   private final int[] q;
 
-  public Ip6Address(int[] q) {
+  public IpV6Address(int[] q) {
     this.q = q;
   }
 
@@ -18,8 +36,8 @@ public final class Ip6Address {
     return Arrays.stream(q).boxed().map(v -> HexFormat.of().withUpperCase().toHexDigits((short) v.intValue())).collect(joining(":"));
   }
 
-  public static final Ip6Address LOOPBACK_ADDRESS = Ip6Address.from("0:0:0:0:0:0:0:1");
-  public static final Ip6Address UNSPECIFIED_ADDRESS = Ip6Address.from("0:0:0:0:0:0:0:0");
+  public static final IpV6Address LOOPBACK_ADDRESS = IpV6Address.from("0:0:0:0:0:0:0:1");
+  public static final IpV6Address UNSPECIFIED_ADDRESS = IpV6Address.from("0:0:0:0:0:0:0:0");
 
   public boolean isUnicastAddress() {
     return false;
@@ -30,7 +48,7 @@ public final class Ip6Address {
   }
 
   public boolean isLoopbackAddress() {
-    return false;
+    return this.equals(LOOPBACK_ADDRESS);
   }
 
   public boolean isUnspecifiedAddress() {
@@ -49,13 +67,24 @@ public final class Ip6Address {
          ::                             the unspecified address
    */
 
-  public static Ip6Address from(String ip6) {
+  /*
+the decimal values of the four low-order 8-bit pieces of the
+      address (standard IPv4 representation).  Examples:
+
+         0:0:0:0:0:0:13.1.68.3
+         0:0:0:0:0:FFFF:129.144.52.38
+
+      or in compressed form:
+         ::13.1.68.3
+         ::FFFF:129.144.52.38
+   */
+  public static IpV6Address from(String ip6) {
     var ipTuples = ip6.split(":");
     int[] digits = new int[8];
     for (int i = 0; i < ipTuples.length; i++) {
       digits[i] = HexFormat.fromHexDigits(ipTuples[i]);
     }
-    return new Ip6Address(digits);
+    return new IpV6Address(digits);
   }
 
   public int[] q() {
@@ -66,7 +95,7 @@ public final class Ip6Address {
   public boolean equals(Object obj) {
     if (obj == this) return true;
     if (obj == null || obj.getClass() != this.getClass()) return false;
-    var that = (Ip6Address) obj;
+    var that = (IpV6Address) obj;
     return Arrays.equals(this.q, that.q);
   }
 
