@@ -34,6 +34,15 @@ class IpV6AddressTest {
   }
 
   @Test
+  void given_unspecified_address() {
+    String givenIpV6 = "0:0:0:0:0:0:0:0";
+
+    var resultingIpV6 = IpV6Address.from(givenIpV6);
+
+    assertThat(resultingIpV6).isEqualTo(IpV6Address.UNSPECIFIED_ADDRESS);
+  }
+
+  @Test
   void first_basic_conversion() {
     String givenIPAsString = "ABCD:EF01:2345:6789:ABCD:EF01:2345:6789";
 
