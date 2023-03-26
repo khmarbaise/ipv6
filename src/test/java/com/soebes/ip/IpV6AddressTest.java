@@ -18,11 +18,14 @@
  */
 package com.soebes.ip;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.soebes.ip.IpV6Address.LOOPBACK_ADDRESS;
 import static com.soebes.ip.IpV6Address.UNSPECIFIED_ADDRESS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 class IpV6AddressTest {
 
@@ -63,4 +66,35 @@ class IpV6AddressTest {
   }
 
 
+  @Nested
+  class FromForInt {
+
+    @Test
+    void validation_1() {
+      int[] tuples = {0, 0, 0, 0, 0, 0, 0, 0};
+      assertThatCode(() -> IpV6Address.from(tuples)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void invalid_1() {
+      int[] tuples = {0, 0, 0, 0, 0, 0, 0, -1};
+      assertThatIllegalArgumentException()
+          .isThrownBy(() -> IpV6Address.from(tuples))
+          .withMessage("All values must be in the range from 0...65535");
+    }
+
+    @Test
+    void invalid_2() {
+      int[] tuples = {0, 0, 0, 0, 0, 0, 0, 0x10000};
+      assertThatIllegalArgumentException()
+          .isThrownBy(() -> IpV6Address.from(tuples))
+          .withMessage("All values must be in the range from 0...65535");
+    }
+
+    @Test
+    void validation_2() {
+      int[] tuples = {0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff};
+      assertThatCode(() -> IpV6Address.from(tuples)).doesNotThrowAnyException();
+    }
+  }
 }
