@@ -20,9 +20,8 @@
 
 Just an idea.
 
-* https://datatracker.ietf.org/doc/html/rfc4291
-
-== State
+* https://datatracker.ietf.org/doc/html/rfc4291[IP Version 6 Addressing Architecture]
+* https://datatracker.ietf.org/doc/html/rfc5952[A Recommendation for IPv6 Address Text Representation]
 
 It's just a Proof Of Concept
 

@@ -18,23 +18,28 @@
  */
 package com.soebes.ip;
 
+import org.apiguardian.api.API;
+
 import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.Objects;
 
 import static java.util.stream.Collectors.joining;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
+/**
+ * Represents an IP V6 address.
+ *
+ * @author Karl Heinz Marbaise
+ */
+@API(status = EXPERIMENTAL, since = "0.0.1")
 public final class IpV6Address {
-  private final int[] q;
+  private final int[] tuples;
 
-  public IpV6Address(int[] q) {
-    this.q = q;
+  public IpV6Address(int[] tuples) {
+    this.tuples = tuples;
   }
 
-  @Override
-  public String toString() {
-    return Arrays.stream(q).boxed().map(v -> HexFormat.of().withUpperCase().toHexDigits((short) v.intValue())).collect(joining(":"));
-  }
 
   public static final IpV6Address LOOPBACK_ADDRESS = IpV6Address.from("0:0:0:0:0:0:0:1");
   public static final IpV6Address UNSPECIFIED_ADDRESS = IpV6Address.from("0:0:0:0:0:0:0:0");
@@ -78,6 +83,11 @@ the decimal values of the four low-order 8-bit pieces of the
          ::13.1.68.3
          ::FFFF:129.144.52.38
    */
+  /**
+   * @param ip6 String representing the IPV6 address.
+   *
+   * @return Instance of the {@link IpV6Address}
+   */
   public static IpV6Address from(String ip6) {
     var ipTuples = ip6.split(":");
     int[] digits = new int[8];
@@ -87,8 +97,15 @@ the decimal values of the four low-order 8-bit pieces of the
     return new IpV6Address(digits);
   }
 
+  public static IpV6Address from(int[] ip6) {
+    if (ip6.length != 8) {
+      throw new IllegalArgumentException("There must be eight components.");
+    }
+    return new IpV6Address(ip6);
+  }
+
   public int[] q() {
-    return q;
+    return tuples;
   }
 
   @Override
@@ -96,14 +113,19 @@ the decimal values of the four low-order 8-bit pieces of the
     if (obj == this) return true;
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (IpV6Address) obj;
-    return Arrays.equals(this.q, that.q);
+    return Arrays.equals(this.tuples, that.tuples);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(q);
+    return Objects.hash(tuples);
   }
 
+
+  @Override
+  public String toString() {
+    return Arrays.stream(tuples).boxed().map(v -> HexFormat.of().withUpperCase().toHexDigits((short) v.intValue())).collect(joining(":"));
+  }
 
 //    static Comparator<Ip6Address> IP_ADDRESS_COMPARATOR = Comparator
 //        .comparingInt(Ip6Address.q[0]);
