@@ -74,6 +74,6 @@ class IPV6Test {
     String examples = """
         ABCD:EF01:2345:6789:ABCD:EF01:2345:6789
         2001:DB8:0:0:8:800:200C:417A
-         """;
+       """;
   }
 }
