@@ -90,6 +90,11 @@ the decimal values of the four low-order 8-bit pieces of the
    * @return Instance of the {@link IpV6Address}
    */
   //1. check the content of the string... valid "0-9A-Fa-f", ".", ":", "::", "/" ?
+  //      0:0:0:0:0:0:13.1.68.3
+  //      0:0:0:0:0:FFFF:129.144.52.38
+  //      ::13.1.68.3
+  //      ::FFFF:129.144.52.38
+  //
   //      2001:0DB8:0000:CD30:0000:0000:0000:0000/60
   //      2001:0DB8::CD30:0:0:0:0/60
   //      2001:0DB8:0:CD30::/60
@@ -107,6 +112,10 @@ the decimal values of the four low-order 8-bit pieces of the
     int[] digits = new int[8];
     for (int i = 0; i < ipTuples.length; i++) {
       digits[i] = HexFormat.fromHexDigits(ipTuples[i]);
+      var isValid = digits[i] >= 0 && digits[i] <= 65535;
+      if (!isValid) {
+        throw new IllegalArgumentException("The valid range from 0...65535 is violated for [" + i + "]=" + ipTuples[i]);
+      }
     }
     return new IpV6Address(digits);
   }

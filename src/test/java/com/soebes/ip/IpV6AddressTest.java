@@ -65,6 +65,15 @@ class IpV6AddressTest {
     assertThat(ip6Address).hasToString(givenIPAsString);
   }
 
+  @Test
+  void invalid_values() {
+    String givenIPAsString = "FFF8:FFF9:FFFA:FFFB:FFFC:FFFD:FFFE:FFFFF";
+
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> IpV6Address.from(givenIPAsString))
+        .withMessage("The valid range from 0...65535 is violated for [7]=FFFFF");
+  }
+
   @Nested
   class ConversionWithXX {
     @Test
