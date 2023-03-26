@@ -2,35 +2,12 @@ package com.soebes.ip;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HexFormat;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class IPV6Test {
-
-  record Ip6Address(int[] q) {
-    @Override
-    public String toString() {
-      return Arrays.stream(q).boxed().map(v -> HexFormat.of().withUpperCase().toHexDigits((short)v.intValue())).collect(joining(":"));
-    }
-
-    static Ip6Address from(String ip6) {
-      var ipTuples = ip6.split(":");
-      int[] digits = new int[8];
-      for (int i = 0; i < ipTuples.length; i++) {
-        digits[i] = HexFormat.fromHexDigits(ipTuples[i]);
-      }
-      return new Ip6Address(digits);
-    }
-
-//    static Comparator<Ip6Address> IP_ADDRESS_COMPARATOR = Comparator
-//        .comparingInt(Ip6Address.q[0]);
-
-  }
 
   record IpAddress(int t1, int t2, int t3, int t4) {
     @Override
