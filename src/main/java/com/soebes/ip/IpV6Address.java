@@ -84,9 +84,9 @@ the decimal values of the four low-order 8-bit pieces of the
          ::13.1.68.3
          ::FFFF:129.144.52.38
    */
+
   /**
    * @param ip6 String representing the IPV6 address.
-   *
    * @return Instance of the {@link IpV6Address}
    */
   public static IpV6Address from(String ip6) {
@@ -98,16 +98,19 @@ the decimal values of the four low-order 8-bit pieces of the
     return new IpV6Address(digits);
   }
 
-  private static Predicate<Integer> isXX = s -> s.intValue() < 0 && s.intValue() > 0xffff;
+  private static Predicate<Integer> isGreaterOrEqualsZero = s -> s >= 0;
+  private static Predicate<Integer> isLessOrEqualsMaxValue = s -> s <= 0xffff;
+  private static Predicate<Integer> isInValidRange = isGreaterOrEqualsZero.and(isLessOrEqualsMaxValue);
 
   public static IpV6Address from(int[] ip6) {
     if (ip6.length != 8) {
       throw new IllegalArgumentException("There must be eight components.");
     }
-    var invalidRange = Arrays.stream(ip6).boxed().noneMatch(isXX);
-    if (invalidRange) {
-
+    var allValid = Arrays.stream(ip6).boxed().allMatch(isInValidRange);
+    if (!allValid) {
+      throw new IllegalArgumentException("All values must be in the range from 0...65535");
     }
+
     return new IpV6Address(ip6);
   }
 
