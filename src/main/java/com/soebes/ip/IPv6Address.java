@@ -64,14 +64,14 @@ public final class IPv6Address implements Comparator<IPv6Address> {
    *
    * @link <a href="https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.3">The Loopback Address</a>
    */
-  public static final IPv6Address LOOPBACK_ADDRESS = new IPv6Address(0,0,0,0,0,0,0,1);
+  public static final IPv6Address LOOPBACK = new IPv6Address(0,0,0,0,0,0,0,1);
 
   /**
    * The unspecified address use used to be compared to or as a default initialization.
    *
    * @link <a href="https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.2">The Unspecified Address</a>
    */
-  public static final IPv6Address UNSPECIFIED_ADDRESS = new IPv6Address(0,0,0,0,0,0,0,0);
+  public static final IPv6Address UNSPECIFIED = new IPv6Address(0,0,0,0,0,0,0,0);
 
   public boolean isUnicastAddress() {
     return false;
@@ -82,17 +82,17 @@ public final class IPv6Address implements Comparator<IPv6Address> {
   }
 
   /**
-   * @return true if the current IPv6 represents the {@link #LOOPBACK_ADDRESS}, false otherwise.
+   * @return true if the current IPv6 represents the {@link #LOOPBACK}, false otherwise.
    */
   public boolean isLoopbackAddress() {
-    return this.equals(LOOPBACK_ADDRESS);
+    return this.equals(LOOPBACK);
   }
 
   /**
-   * @return true if the current IPv6 represents the {@link #UNSPECIFIED_ADDRESS}, false otherwise.
+   * @return true if the current IPv6 represents the {@link #UNSPECIFIED}, false otherwise.
    */
   public boolean isUnspecifiedAddress() {
-    return this.equals(UNSPECIFIED_ADDRESS);
+    return this.equals(UNSPECIFIED);
   }
 
   /*
@@ -163,7 +163,7 @@ the decimal values of the four low-order 8-bit pieces of the
 
 
     if (ip6.equals(ZERO_ABBREVIATION)) {
-      return IPv6Address.UNSPECIFIED_ADDRESS;
+      return IPv6Address.UNSPECIFIED;
     }
 
     var split = ip6.split(ZERO_ABBREVIATION);

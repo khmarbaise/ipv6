@@ -42,12 +42,12 @@ var loopback = IPv6Address.from("::1");
 The loopback can be done simpler like:
 [source,java]
 ----
-var loopback = IPv6Address.LOOPBACK_ADDRESS;
+var loopback = IPv6Address.LOOPBACK;
 ----
 There are also others like:
 [source,java]
 ----
-var unspecified_one = IPv6Address.UNSPECIFIED_ADDRESS;
+var unspecified_one = IPv6Address.UNSPECIFIED;
 var unspecified_two = IPv6Address.from("::");
 ----
 

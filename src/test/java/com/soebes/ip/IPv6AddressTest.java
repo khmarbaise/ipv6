@@ -22,8 +22,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.soebes.ip.IPv6Address.LOOPBACK_ADDRESS;
-import static com.soebes.ip.IPv6Address.UNSPECIFIED_ADDRESS;
+import static com.soebes.ip.IPv6Address.LOOPBACK;
+import static com.soebes.ip.IPv6Address.UNSPECIFIED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -36,7 +36,7 @@ class IPv6AddressTest {
 
     var resultingIpV6 = IPv6Address.from(givenIpV6);
 
-    assertThat(resultingIpV6).isEqualTo(LOOPBACK_ADDRESS);
+    assertThat(resultingIpV6).isEqualTo(LOOPBACK);
   }
 
   @Test
@@ -45,7 +45,7 @@ class IPv6AddressTest {
 
     var resultingIpV6 = IPv6Address.from(givenIpV6);
 
-    assertThat(resultingIpV6).isEqualTo(UNSPECIFIED_ADDRESS);
+    assertThat(resultingIpV6).isEqualTo(UNSPECIFIED);
   }
 
   @Test
@@ -82,7 +82,7 @@ class IPv6AddressTest {
     @Test
     @DisplayName("Given constant should be an unspecified address.")
     void given_constant_should_be_unspecified_address() {
-      assertThat(UNSPECIFIED_ADDRESS.isUnspecifiedAddress()).isTrue();
+      assertThat(UNSPECIFIED.isUnspecifiedAddress()).isTrue();
     }
 
     @Test
