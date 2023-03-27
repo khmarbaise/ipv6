@@ -67,7 +67,7 @@ public final class IPv6Address implements Comparator<IPv6Address> {
   public static final IPv6Address LOOPBACK = new IPv6Address(0,0,0,0,0,0,0,1);
 
   /**
-   * The unspecified address use used to be compared to or as a default initialization.
+   * The unspecified address is used to be compared to or as a default initialization.
    *
    * @link <a href="https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.2">The Unspecified Address</a>
    */
@@ -156,6 +156,11 @@ the decimal values of the four low-order 8-bit pieces of the
     return digits;
   }
 
+  /**
+   *
+   * @param ip6 The given string representation of an IP Version 6 address.
+   * @return The instance of {@link IPv6Address}.
+   */
   public static IPv6Address from(String ip6) {
     if (!ip6.matches("[0-9a-fA-F.:/]+")) {
       throw new IllegalArgumentException("Invalid characters only 0-9a-fA-F.:/ are allowed.");
@@ -196,6 +201,11 @@ the decimal values of the four low-order 8-bit pieces of the
   private static Predicate<Integer> isLessOrEqualsMaxValue = s -> s <= 0xffff;
   private static Predicate<Integer> isInValidRange = isGreaterOrEqualsZero.and(isLessOrEqualsMaxValue);
 
+  /**
+   * @param ip6 The eight tuples each 16 bit unsigned.
+   * @return An {@link IPv6Address}.
+   * @throws IllegalArgumentException in case of failures.
+   */
   public static IPv6Address from(int[] ip6) {
     if (ip6.length != 8) {
       throw new IllegalArgumentException("There must be eight components.");
