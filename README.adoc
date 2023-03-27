@@ -51,4 +51,14 @@ var unspecified_one = IPv6Address.UNSPECIFIED;
 var unspecified_two = IPv6Address.from("::");
 ----
 
+[source,java]
+.filename.java
+----
+var first = IPv6Address.from("2001:DB8:0:0:8:800:200C:417A");
+var second = IPv6Address.from("2001:DB8::8:800:200C:417A");
+
+assertThat(first.equals(second)).isTrue();
+----
+
+
 
