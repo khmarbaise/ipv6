@@ -21,6 +21,7 @@ package com.soebes.ip;
 import org.apiguardian.api.API;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HexFormat;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -40,7 +41,7 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
  * @implNote Maybe we should reconsider to use {@code short} or {@code char} instead? Not sure yet.
  */
 @API(status = EXPERIMENTAL, since = "0.0.1")
-public final class IPv6Address {
+public final class IPv6Address implements Comparator<IPv6Address> {
 
   private final int[] tuples;
 
@@ -201,10 +202,15 @@ the decimal values of the four low-order 8-bit pieces of the
     }
     var allValid = Arrays.stream(ip6).boxed().allMatch(isInValidRange);
     if (!allValid) {
-      throw new IllegalArgumentException("All values must be in the range from 0...65535");
+      throw new IllegalArgumentException("All values must be in the range from 0...65535 (0x000...0xffff)");
     }
 
     return new IPv6Address(ip6);
+  }
+
+  @Override
+  public int compare(IPv6Address o1, IPv6Address o2) {
+    return 0;
   }
 
   @Override

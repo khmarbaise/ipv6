@@ -197,7 +197,7 @@ class IPv6AddressTest {
       int[] tuples = {0, 0, 0, 0, 0, 0, 0, -1};
       assertThatIllegalArgumentException()
           .isThrownBy(() -> IPv6Address.from(tuples))
-          .withMessage("All values must be in the range from 0...65535");
+          .withMessage("All values must be in the range from 0...65535 (0x000...0xffff)");
     }
 
     @Test
@@ -205,7 +205,7 @@ class IPv6AddressTest {
       int[] tuples = {0, 0, 0, 0, 0, 0, 0, 0x10000};
       assertThatIllegalArgumentException()
           .isThrownBy(() -> IPv6Address.from(tuples))
-          .withMessage("All values must be in the range from 0...65535");
+          .withMessage("All values must be in the range from 0...65535 (0x000...0xffff)");
     }
 
     @Test
