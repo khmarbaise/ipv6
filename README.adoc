@@ -16,13 +16,15 @@
 //   specific language governing permissions and limitations
 //   under the License.
 //
-= IP V6
+= IP Version 6 Address
 
 Just an idea.
 
 * https://datatracker.ietf.org/doc/html/rfc4291[IP Version 6 Addressing Architecture]
 * https://datatracker.ietf.org/doc/html/rfc5952[A Recommendation for IPv6 Address Text Representation]
 * https://datatracker.ietf.org/doc/html/rfc4038[Application Aspects of IPv6 Transition]
+
+== Status
 
 It's just a Proof Of Concept
 
