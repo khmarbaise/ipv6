@@ -39,6 +39,12 @@ public record IPv4Address(int t1, int t2, int t3, int t4) {
   }
 
 
+  public int first16() {
+    return this.t1 * 256 + this.t2;
+  }
+  public int second16() {
+    return this.t3 * 256 + this.t4;
+  }
   static Comparator<IPv4Address> IP_ADDRESS_COMPARATOR = Comparator
       .comparingInt(IPv4Address::t1)
       .thenComparingInt(IPv4Address::t2)
