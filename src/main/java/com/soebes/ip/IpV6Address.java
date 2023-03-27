@@ -192,7 +192,4 @@ the decimal values of the four low-order 8-bit pieces of the
     return Arrays.stream(tuples).boxed().map(v -> HexFormat.of().withUpperCase().toHexDigits((short) v.intValue())).collect(joining(":"));
   }
 
-//    static Comparator<Ip6Address> IP_ADDRESS_COMPARATOR = Comparator
-//        .comparingInt(Ip6Address.q[0]);
-
 }
