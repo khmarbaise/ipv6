@@ -32,4 +32,23 @@ It's just a Proof Of Concept
 
 JDK17+
 
+== Examples
+
+[source,java]
+----
+var ip6Address = IPv6Address.from("FF01::101");
+var loopback = IPv6Address.from("::1");
+----
+The loopback can be done simpler like:
+[source,java]
+----
+var loopback = IPv6Address.LOOPBACK_ADDRESS;
+----
+There are also others like:
+[source,java]
+----
+var unspecified_one = IPv6Address.UNSPECIFIED_ADDRESS;
+var unspecified_two = IPv6Address.from("::");
+----
+
 
