@@ -29,25 +29,48 @@ import static java.util.stream.Collectors.joining;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
- * Represents an IP V6 address.
+ * Represents an IP Version 6 address.
  *
  * @author Karl Heinz Marbaise
+ *
+ * @see <a href="https://datatracker.ietf.org/doc/html/rfc4291">IP Version 6 Addressing Architecture</a>
+ *
+ * @implNote Currently using internally {@code int} instead of {@code short} or alike because
+ * it's easier to handle conversions from/to hex etc. without handling 2'th complements etc.
+ * @implNote Maybe we should reconsider to use {@code short} or {@code char} instead? Not sure yet.
  */
 @API(status = EXPERIMENTAL, since = "0.0.1")
-public final class IpV6Address {
+public final class IPv6Address {
+
   private final int[] tuples;
 
-  public IpV6Address(int[] tuples) {
+  /**
+   * Only used for internal purposes.
+   */
+  private IPv6Address(int[] tuples) {
     this.tuples = tuples;
   }
 
-  private IpV6Address(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8) {
+  /**
+   * Only used for internal purposes.
+   */
+  private IPv6Address(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8) {
     this.tuples = new int[]{t1, t2, t3, t4, t5, t6, t7, t8};
   }
 
+  /**
+   * The loopback address
+   *
+   * @link <a href="https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.3">The Loopback Address</a>
+   */
+  public static final IPv6Address LOOPBACK_ADDRESS = new IPv6Address(0,0,0,0,0,0,0,1);
 
-  public static final IpV6Address LOOPBACK_ADDRESS = new IpV6Address(0,0,0,0,0,0,0,1);
-  public static final IpV6Address UNSPECIFIED_ADDRESS = new IpV6Address(0,0,0,0,0,0,0,0);
+  /**
+   * The unspecified address use used to be compared to or as a default initialization.
+   *
+   * @link <a href="https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.2">The Unspecified Address</a>
+   */
+  public static final IPv6Address UNSPECIFIED_ADDRESS = new IPv6Address(0,0,0,0,0,0,0,0);
 
   public boolean isUnicastAddress() {
     return false;
@@ -57,12 +80,18 @@ public final class IpV6Address {
     return false;
   }
 
+  /**
+   * @return true if the current IPv6 represents the {@link #LOOPBACK_ADDRESS}, false otherwise.
+   */
   public boolean isLoopbackAddress() {
     return this.equals(LOOPBACK_ADDRESS);
   }
 
+  /**
+   * @return true if the current IPv6 represents the {@link #UNSPECIFIED_ADDRESS}, false otherwise.
+   */
   public boolean isUnspecifiedAddress() {
-    return false;
+    return this.equals(UNSPECIFIED_ADDRESS);
   }
 
   /*
@@ -91,7 +120,7 @@ the decimal values of the four low-order 8-bit pieces of the
 
   /**
    * @param ip6 String representing of an IP V6 address.
-   * @return Instance of the {@link IpV6Address}
+   * @return Instance of the {@link IPv6Address}
    */
   //1. check the content of the string... valid "0-9A-Fa-f", ".", ":", "::", "/" ?
   //      0:0:0:0:0:0:13.1.68.3
@@ -126,9 +155,14 @@ the decimal values of the four low-order 8-bit pieces of the
     return digits;
   }
 
-  public static IpV6Address from(String ip6) {
+  public static IPv6Address from(String ip6) {
+    if (!ip6.matches("[0-9a-fA-F.:/]+")) {
+      throw new IllegalArgumentException("Invalid characters only 0-9a-fA-F.:/ are allowed.");
+    }
+
+
     if (ip6.equals(ZERO_ABBREVIATION)) {
-      return IpV6Address.UNSPECIFIED_ADDRESS;
+      return IPv6Address.UNSPECIFIED_ADDRESS;
     }
 
     var split = ip6.split(ZERO_ABBREVIATION);
@@ -149,10 +183,10 @@ the decimal values of the four low-order 8-bit pieces of the
         result[pos--] = digitsFirst[i];
       }
 
-      return new IpV6Address(result);
+      return new IPv6Address(result);
     } else {
       int[] digits = convert(ip6);
-      return new IpV6Address(digits);
+      return new IPv6Address(digits);
     }
 
   }
@@ -161,7 +195,7 @@ the decimal values of the four low-order 8-bit pieces of the
   private static Predicate<Integer> isLessOrEqualsMaxValue = s -> s <= 0xffff;
   private static Predicate<Integer> isInValidRange = isGreaterOrEqualsZero.and(isLessOrEqualsMaxValue);
 
-  public static IpV6Address from(int[] ip6) {
+  public static IPv6Address from(int[] ip6) {
     if (ip6.length != 8) {
       throw new IllegalArgumentException("There must be eight components.");
     }
@@ -170,14 +204,14 @@ the decimal values of the four low-order 8-bit pieces of the
       throw new IllegalArgumentException("All values must be in the range from 0...65535");
     }
 
-    return new IpV6Address(ip6);
+    return new IPv6Address(ip6);
   }
 
   @Override
   public boolean equals(Object obj) {
     if (obj == this) return true;
     if (obj == null || obj.getClass() != this.getClass()) return false;
-    var that = (IpV6Address) obj;
+    var that = (IPv6Address) obj;
     return Arrays.equals(this.tuples, that.tuples);
   }
 
