@@ -116,7 +116,7 @@ class IPv6AddressTest {
   }
 
   // This is not working yet!
-  static Stream<Arguments> conversions_ip6_with_ip4_with_double_quote() {
+  static Stream<Arguments> conversions_ip6_with_ip4_with_double_colon() {
     return Stream.of(
         of("0:0:0:0:0:0:13.1.68.3", "0000:0000:0000:0000:0000:0000:0D01:4403"),
         of("::13.1.68.3", "0000:0000:0000:0000:0000:0000:0D01:4403"),
@@ -126,14 +126,13 @@ class IPv6AddressTest {
 
   @ParameterizedTest
   @MethodSource
-  void conversions_ip6_with_ip4_with_double_quote(String given, String expected) {
+  void conversions_ip6_with_ip4_with_double_colon(String given, String expected) {
     var ip6Address = IPv6Address.from(given);
     assertThat(ip6Address).hasToString(expected);
   }
 
 
-
-  static Stream<Arguments> conversions_ip6_with_double_quote() {
+  static Stream<Arguments> conversions_ip6_with_double_colon() {
     return Stream.of(
         of("2001:DB8::8:800:200C:417A", "2001:0DB8:0000:0000:0008:0800:200C:417A"),
         of("FF01::101", "FF01:0000:0000:0000:0000:0000:0000:0101"),
@@ -144,7 +143,7 @@ class IPv6AddressTest {
 
   @ParameterizedTest
   @MethodSource
-  void conversions_ip6_with_double_quote(String given, String expected) {
+  void conversions_ip6_with_double_colon(String given, String expected) {
     var ip6Address = IPv6Address.from(given);
     assertThat(ip6Address).hasToString(expected);
   }
@@ -153,39 +152,36 @@ class IPv6AddressTest {
   class FromForInt {
 
     @Test
-    void validation_1() {
+    @DisplayName("The conversions of only zero should not fail.")
+    void conversion_which_does_not_fail_with_minimum() {
       int[] tuples = {0, 0, 0, 0, 0, 0, 0, 0};
       assertThatCode(() -> IPv6Address.from(tuples)).doesNotThrowAnyException();
     }
 
-    @Test
-    void invalid_1() {
-      int[] tuples = {0, 0, 0, 0, 0, 0, 0, -1};
-      assertThatIllegalArgumentException()
-          .isThrownBy(() -> IPv6Address.from(tuples))
-          .withMessage("All values must be in the range from 0...65535 (0x000...0xffff)");
-    }
 
     @Test
-    void invalid_2() {
-      int[] tuples = {0, 0, 0, 0, 0, 0, 0, 0x10000};
-      assertThatIllegalArgumentException()
-          .isThrownBy(() -> IPv6Address.from(tuples))
-          .withMessage("All values must be in the range from 0...65535 (0x000...0xffff)");
-    }
-
-    @Test
-    void invalid_3() {
-      int[] tuples = {0, 0, 0, 0, 0, 0, 0x10000};
-      assertThatIllegalArgumentException()
-          .isThrownBy(() -> IPv6Address.from(tuples))
-          .withMessage("There must be eight components.");
-    }
-
-    @Test
-    void validation_2() {
+    @DisplayName("The conversions of only 0xffff should not fail.")
+    void conversion_which_does_not_fail_with_maximum() {
       int[] tuples = {0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff};
       assertThatCode(() -> IPv6Address.from(tuples)).doesNotThrowAnyException();
     }
+
+    static Stream<Arguments> conversions_which_have_to_fail_with_exceptions() {
+      return Stream.of(
+          of(new int[]{0, 0, 0, 0, 0, 0, 0, -1}, "All values must be in the range from 0...65535 (0x000...0xffff)"),
+          of(new int[]{0, 0, 0, 0, 0, 0, 0, 0x10000}, "All values must be in the range from 0...65535 (0x000...0xffff)"),
+          of(new int[]{0, 0, 0, 0, 0, 0, 0x10000}, "There must be eight components.")
+      );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void conversions_which_have_to_fail_with_exceptions(int[] given, String expectedExceptionMessage) {
+      assertThatIllegalArgumentException()
+          .isThrownBy(() -> IPv6Address.from(given))
+          .withMessage(expectedExceptionMessage);
+    }
+
   }
+
 }
