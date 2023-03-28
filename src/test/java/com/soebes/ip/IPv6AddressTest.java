@@ -21,12 +21,18 @@ package com.soebes.ip;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static com.soebes.ip.IPv6Address.LOOPBACK;
 import static com.soebes.ip.IPv6Address.UNSPECIFIED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 class IPv6AddressTest {
 
@@ -109,84 +115,38 @@ class IPv6AddressTest {
 
   }
 
-  @Nested
-  class ConversionWithXX {
-    @Test
-    void conversion_with_ip4_1() {
-      String givenIPAsString = "0:0:0:0:0:0:13.1.68.3";
-
-      var ip6Address = IPv6Address.from(givenIPAsString);
-
-      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403"); // ??
-    }
-
-    @Test
-    void conversion_with_ip4_2() {
-      String givenIPAsString = "::13.1.68.3";
-
-      var ip6Address = IPv6Address.from(givenIPAsString);
-
-      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403"); // ??
-    }
-
-    @Test
-    void conversion_with_ip4_3() {
-      String givenIPAsString = "::FFFF:129.144.52.38";
-
-      var ip6Address = IPv6Address.from(givenIPAsString);
-
-      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:FFFF:0D01:4403"); // ??
-    }
+  // This is not working yet!
+  static Stream<Arguments> conversions_ip6_with_ip4_with_double_quote() {
+    return Stream.of(
+        of("0:0:0:0:0:0:13.1.68.3", "0000:0000:0000:0000:0000:0000:0D01:4403"),
+        of("::13.1.68.3", "0000:0000:0000:0000:0000:0000:0D01:4403"),
+        of("::FFFF:129.144.52.38", "0000:0000:0000:0000:0000:FFFF:0D01:4403")
+    );
   }
 
-  @Nested
-  class ConversionWithDoubleColon {
+  @ParameterizedTest
+  @MethodSource
+  void conversions_ip6_with_ip4_with_double_quote(String given, String expected) {
+    var ip6Address = IPv6Address.from(given);
+    assertThat(ip6Address).hasToString(expected);
+  }
 
-    @Test
-    void conversion_with_double_colon_1() {
-      String givenIPAsString = "2001:DB8::8:800:200C:417A";
 
-      var ip6Address = IPv6Address.from(givenIPAsString);
 
-      assertThat(ip6Address).hasToString("2001:0DB8:0000:0000:0008:0800:200C:417A");
-    }
+  static Stream<Arguments> conversions_ip6_with_double_quote() {
+    return Stream.of(
+        of("2001:DB8::8:800:200C:417A", "2001:0DB8:0000:0000:0008:0800:200C:417A"),
+        of("FF01::101", "FF01:0000:0000:0000:0000:0000:0000:0101"),
+        of("::1", "0000:0000:0000:0000:0000:0000:0000:0001"),
+        of("::", "0000:0000:0000:0000:0000:0000:0000:0000")
+    );
+  }
 
-    @Test
-    void conversion_with_double_colon_2() {
-      String givenIPAsString = "FF01::101";
-
-      var ip6Address = IPv6Address.from(givenIPAsString);
-
-      assertThat(ip6Address).hasToString("FF01:0000:0000:0000:0000:0000:0000:0101");
-    }
-
-    @Test
-    void conversion_with_double_colon_3() {
-      String givenIPAsString = "::1";
-
-      var ip6Address = IPv6Address.from(givenIPAsString);
-
-      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0000:0001");
-    }
-
-    @Test
-    void conversion_with_double_colon_4() {
-      String givenIPAsString = "::";
-
-      var ip6Address = IPv6Address.from(givenIPAsString);
-
-      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0000:0000");
-    }
-
-    @Test
-    void conversion_with_double_colon_5() {
-      String givenIPAsString = "::13.1.68.3";
-
-      var ip6Address = IPv6Address.from(givenIPAsString);
-
-      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403");
-    }
-
+  @ParameterizedTest
+  @MethodSource
+  void conversions_ip6_with_double_quote(String given, String expected) {
+    var ip6Address = IPv6Address.from(given);
+    assertThat(ip6Address).hasToString(expected);
   }
 
   @Nested
