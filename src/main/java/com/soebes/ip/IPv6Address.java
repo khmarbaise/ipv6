@@ -148,8 +148,8 @@ the decimal values of the four low-order 8-bit pieces of the
     int[] digits = new int[ipTuples.length];
     for (int i = 0; i < ipTuples.length; i++) {
       digits[i] = HexFormat.fromHexDigits(ipTuples[i]);
-      var isValid = digits[i] >= 0 && digits[i] <= 65535;
-      if (!isValid) {
+      var isInvalid = digits[i] < 0 || digits[i] > 65535;
+      if (isInvalid) {
         throw new IllegalArgumentException("The valid range from 0...65535 is violated for [" + i + "]=" + ipTuples[i]);
       }
     }

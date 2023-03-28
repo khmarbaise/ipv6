@@ -30,22 +30,27 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 
 class IPv6AddressTest {
 
-  @Test
-  void given_loop_back_address() {
-    String givenIpV6 = "0:0:0:0:0:0:0:1";
+  @Nested
+  class Constants {
 
-    var resultingIpV6 = IPv6Address.from(givenIpV6);
+    @Test
+    void given_loop_back_address() {
+      String givenIpV6 = "0:0:0:0:0:0:0:1";
 
-    assertThat(resultingIpV6).isEqualTo(LOOPBACK);
-  }
+      var resultingIpV6 = IPv6Address.from(givenIpV6);
 
-  @Test
-  void given_unspecified_address() {
-    String givenIpV6 = "0:0:0:0:0:0:0:0";
+      assertThat(resultingIpV6).isEqualTo(LOOPBACK);
+    }
 
-    var resultingIpV6 = IPv6Address.from(givenIpV6);
+    @Test
+    void given_unspecified_address() {
+      String givenIpV6 = "0:0:0:0:0:0:0:0";
 
-    assertThat(resultingIpV6).isEqualTo(UNSPECIFIED);
+      var resultingIpV6 = IPv6Address.from(givenIpV6);
+
+      assertThat(resultingIpV6).isEqualTo(UNSPECIFIED);
+    }
+
   }
 
   @Test
