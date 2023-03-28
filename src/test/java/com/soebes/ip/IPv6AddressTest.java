@@ -30,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 
 class IPv6AddressTest {
 
+
   @Nested
   class Constants {
 
