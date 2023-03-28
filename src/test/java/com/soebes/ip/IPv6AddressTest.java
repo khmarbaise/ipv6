@@ -134,7 +134,7 @@ class IPv6AddressTest {
 
       var ip6Address = IPv6Address.from(givenIPAsString);
 
-      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:0000:0D01:4403"); // ??
+      assertThat(ip6Address).hasToString("0000:0000:0000:0000:0000:FFFF:0D01:4403"); // ??
     }
   }
 
