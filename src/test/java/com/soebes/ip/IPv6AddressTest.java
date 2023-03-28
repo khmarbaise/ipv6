@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 
 class IPv6AddressTest {
 
-
   @Nested
   class Constants {
 
@@ -64,7 +63,7 @@ class IPv6AddressTest {
   }
 
   @Test
-  void convertion() {
+  void conversion() {
     String givenIPAsString = "FFF8:FFF9:FFFA:FFFB:FFFC:FFFD:FFFE:FFFF";
 
     var ip6Address = IPv6Address.from(givenIPAsString);
@@ -73,6 +72,7 @@ class IPv6AddressTest {
   }
 
   @Test
+  @DisplayName("Given a IP v 6 address with a single invalid value.")
   void invalid_values() {
     String givenIPAsString = "FFF8:FFF9:FFFA:FFFB:FFFC:FFFD:FFFE:FFFFF";
 
