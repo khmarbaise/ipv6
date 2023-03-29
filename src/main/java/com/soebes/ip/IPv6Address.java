@@ -23,7 +23,6 @@ import org.apiguardian.api.API;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HexFormat;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.joining;
@@ -178,7 +177,15 @@ the decimal values of the four low-order 8-bit pieces of the
       int[] result = new int[8];
 
       int[] digitsFirst = convert(split[0]);
-      int[] digitsSecond = convert(split[1]);
+
+      int[] digitsSecond;
+      if (split[1].contains(".")) {
+        // having an IP4 in there...
+        var ip4 = IPv4Address.toIpAddress.apply(split[1]);
+        digitsSecond = new int[]{ip4.first16(), ip4.second16()};
+      } else {
+        digitsSecond = convert(split[1]);
+      }
 
       int pos = 7;
       for (int i = digitsSecond.length - 1; i >= 0; i--) {
@@ -221,7 +228,7 @@ the decimal values of the four low-order 8-bit pieces of the
 
   @Override
   public int compare(IPv6Address o1, IPv6Address o2) {
-    return 0;
+    return Arrays.compare(o1.tuples, o2.tuples);
   }
 
   @Override
@@ -234,7 +241,7 @@ the decimal values of the four low-order 8-bit pieces of the
 
   @Override
   public int hashCode() {
-    return Objects.hash(tuples);
+    return Arrays.hashCode(this.tuples);
   }
 
 
