@@ -53,6 +53,7 @@ public final class IPv6Address implements Comparator<IPv6Address> {
   /**
    * Only used for internal purposes.
    */
+  @SuppressWarnings("java:S107")
   private IPv6Address(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8) {
     this.tuples = new int[]{t1, t2, t3, t4, t5, t6, t7, t8};
   }
@@ -139,7 +140,7 @@ the decimal values of the four low-order 8-bit pieces of the
   //
   //      2001:0DB8::CD3/60    address to left of "/" expands to
   //                           2001:0DB8:0000:0000:0000:0000:0000:0CD3
-  private static String ZERO_ABBREVIATION = "::";
+  private static final String ZERO_ABBREVIATION = "::";
 
   private static int[] convert(String x) {
     var ipTuples = x.split(":");
