@@ -69,6 +69,24 @@ class IPv6AddressTest {
   }
 
   @Test
+  void invalid_characters() {
+    String givenIPAsString = "FFF8!:FFF9:FFFA:FFFB:FFFC:FFFD:FFFE:FFFF";
+
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> IPv6Address.from(givenIPAsString))
+        .withMessage("Invalid characters only 0-9a-fA-F.:/ are allowed.");
+  }
+
+  @Test
+  void illegal_duplication() {
+    String givenIPAsString = "FF::F::001";
+
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> IPv6Address.from(givenIPAsString))
+        .withMessage("Grouping with :: only allowed once.");
+  }
+
+  @Test
   void conversion() {
     String givenIPAsString = "FFF8:FFF9:FFFA:FFFB:FFFC:FFFD:FFFE:FFFF";
 

@@ -33,12 +33,10 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
  * Represents an IP Version 6 address.
  *
  * @author Karl Heinz Marbaise
- *
- * @see <a href="https://datatracker.ietf.org/doc/html/rfc4291">IP Version 6 Addressing Architecture</a>
- *
  * @implNote Currently using internally {@code int} instead of {@code short} or alike because
  * it's easier to handle conversions from/to hex etc. without handling 2'th complements etc.
  * @implNote Maybe we should reconsider to use {@code short} or {@code char} instead? Not sure yet.
+ * @see <a href="https://datatracker.ietf.org/doc/html/rfc4291">IP Version 6 Addressing Architecture</a>
  */
 @API(status = EXPERIMENTAL, since = "0.0.1")
 public final class IPv6Address implements Comparator<IPv6Address> {
@@ -64,14 +62,14 @@ public final class IPv6Address implements Comparator<IPv6Address> {
    *
    * @link <a href="https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.3">The Loopback Address</a>
    */
-  public static final IPv6Address LOOPBACK = new IPv6Address(0,0,0,0,0,0,0,1);
+  public static final IPv6Address LOOPBACK = new IPv6Address(0, 0, 0, 0, 0, 0, 0, 1);
 
   /**
    * The unspecified address is used to be compared to or as a default initialization.
    *
    * @link <a href="https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.2">The Unspecified Address</a>
    */
-  public static final IPv6Address UNSPECIFIED = new IPv6Address(0,0,0,0,0,0,0,0);
+  public static final IPv6Address UNSPECIFIED = new IPv6Address(0, 0, 0, 0, 0, 0, 0, 0);
 
   public boolean isUnicastAddress() {
     return false;
@@ -157,7 +155,6 @@ the decimal values of the four low-order 8-bit pieces of the
   }
 
   /**
-   *
    * @param ip6 The given string representation of an IP Version 6 address.
    * @return The instance of {@link IPv6Address}.
    */
@@ -166,26 +163,29 @@ the decimal values of the four low-order 8-bit pieces of the
       throw new IllegalArgumentException("Invalid characters only 0-9a-fA-F.:/ are allowed.");
     }
 
-
     if (ip6.equals(ZERO_ABBREVIATION)) {
       return IPv6Address.UNSPECIFIED;
     }
 
     var split = ip6.split(ZERO_ABBREVIATION);
 
-    if (split.length > 1) {
+    if (split.length > 2) {
+      throw new IllegalArgumentException("Grouping with :: only allowed once.");
+    }
+
+    if (split.length == 2) {
       int[] result = new int[8];
 
       int[] digitsFirst = convert(split[0]);
       int[] digitsSecond = convert(split[1]);
 
       int pos = 7;
-      for (int i = digitsSecond.length-1; i >=0; i--) {
+      for (int i = digitsSecond.length - 1; i >= 0; i--) {
         result[pos--] = digitsSecond[i];
       }
 
       pos -= (8 - digitsSecond.length - digitsFirst.length);
-      for (int i = digitsFirst.length-1; i >=0; i--) {
+      for (int i = digitsFirst.length - 1; i >= 0; i--) {
         result[pos--] = digitsFirst[i];
       }
 
