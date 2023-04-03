@@ -179,7 +179,7 @@ the decimal values of the four low-order 8-bit pieces of the
       int[] digitsFirst = convert(split[0]);
 
       int[] digitsSecond;
-      if (split[1].contains(".")) {
+      if (split[1].contains(".")) { //FIXME: Better checking
         // having an IP4 in there...
         var ip4 = IPv4Address.toIpAddress.apply(split[1]);
         digitsSecond = new int[]{ip4.first16(), ip4.second16()};
