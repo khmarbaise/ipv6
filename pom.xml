@@ -36,11 +36,6 @@
         <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>nl.jqno.equalsverifier</groupId>
-        <artifactId>equalsverifier</artifactId>
-        <version>3.14</version>
-      </dependency>
-      <dependency>
         <groupId>org.apiguardian</groupId>
         <artifactId>apiguardian-api</artifactId>
         <version>1.1.2</version>
@@ -52,11 +47,6 @@
     <dependency>
       <groupId>org.apiguardian</groupId>
       <artifactId>apiguardian-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>nl.jqno.equalsverifier</groupId>
-      <artifactId>equalsverifier</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
