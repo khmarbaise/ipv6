@@ -76,7 +76,7 @@ public final class IPv6Address implements Comparator<IPv6Address> {
   }
 
   public boolean isMulticastAddress() {
-    return false;
+    return (this.tuples[0] & 0xff00) == 0xff00 ;
   }
 
   /**
