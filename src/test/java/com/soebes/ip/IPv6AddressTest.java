@@ -202,4 +202,13 @@ class IPv6AddressTest {
 
   }
 
+  @Test
+  void check_for_multicast_address() {
+    String givenIPAsString = "FF00:EF01:2345:6789:ABCD:EF01:2345:6789";
+
+    var ip6Address = IPv6Address.from(givenIPAsString);
+
+    assertThat(ip6Address.isMulticastAddress()).isTrue();
+  }
+
 }
