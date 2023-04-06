@@ -93,52 +93,6 @@ public final class IPv6Address implements Comparator<IPv6Address> {
     return this.equals(UNSPECIFIED);
   }
 
-  /*
-   2001:DB8:0:0:8:800:200C:417A   a unicast address
-         FF01:0:0:0:0:0:0:101           a multicast address
-         0:0:0:0:0:0:0:1                the loopback address
-         0:0:0:0:0:0:0:0                the unspecified address
-
-   2001:DB8::8:800:200C:417A      a unicast address
-         FF01::101                      a multicast address
-         ::1                            the loopback address
-         ::                             the unspecified address
-   */
-
-  /*
-the decimal values of the four low-order 8-bit pieces of the
-      address (standard IPv4 representation).  Examples:
-
-         0:0:0:0:0:0:13.1.68.3
-         0:0:0:0:0:FFFF:129.144.52.38
-
-      or in compressed form:
-         ::13.1.68.3
-         ::FFFF:129.144.52.38
-   */
-
-  /**
-   * @param ip6 String representing of an IP V6 address.
-   * @return Instance of the {@link IPv6Address}
-   */
-  //1. check the content of the string... valid "0-9A-Fa-f", ".", ":", "::", "/" ?
-  //      0:0:0:0:0:0:13.1.68.3
-  //      0:0:0:0:0:FFFF:129.144.52.38
-  //      ::13.1.68.3
-  //      ::FFFF:129.144.52.38
-  //
-  //      2001:0DB8:0000:CD30:0000:0000:0000:0000/60
-  //      2001:0DB8::CD30:0:0:0:0/60
-  //      2001:0DB8:0:CD30::/60
-  //
-  //      2001:0DB8:0:CD3/60   may drop leading zeros, but not trailing
-  //                           zeros, within any 16-bit chunk of the address
-  //
-  //      2001:0DB8::CD30/60   address to left of "/" expands to
-  //                           2001:0DB8:0000:0000:0000:0000:0000:CD30
-  //
-  //      2001:0DB8::CD3/60    address to left of "/" expands to
-  //                           2001:0DB8:0000:0000:0000:0000:0000:0CD3
   private static final String ZERO_ABBREVIATION = "::";
 
   private static int[] convert(String x) {
