@@ -202,13 +202,25 @@ class IPv6AddressTest {
 
   }
 
-  @Test
-  void check_for_multicast_address() {
-    String givenIPAsString = "FF00:EF01:2345:6789:ABCD:EF01:2345:6789";
+  @Nested
+  class MulticastAddresses {
+    @Test
+    void check_for_multicast_address() {
+      String givenIPAsString = "FF00:EF01:2345:6789:ABCD:EF01:2345:6789";
 
-    var ip6Address = IPv6Address.from(givenIPAsString);
+      var ip6Address = IPv6Address.from(givenIPAsString);
 
-    assertThat(ip6Address.isMulticastAddress()).isTrue();
+      assertThat(ip6Address.isMulticastAddress()).isTrue();
+    }
+    @Test
+    void not_being_multicast() {
+      String givenIPAsString = "FE00:EF01:2345:6789:ABCD:EF01:2345:6789";
+
+      var ip6Address = IPv6Address.from(givenIPAsString);
+
+      assertThat(ip6Address.isMulticastAddress()).isFalse();
+    }
+
   }
 
 }
