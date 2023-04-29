@@ -170,6 +170,13 @@ class IPv6AddressTest {
   class FromForInt {
 
     @Test
+    @DisplayName("Convert a valid value.")
+    void conversion_with_valid_value() {
+      int[] tuples = {32768, 0, 128, 128, 0, 0, 0, 192};
+      assertThat(IPv6Address.from(tuples)).isEqualTo(IPv6Address.from("8000:0:80:80:0:0:0:C0"));
+    }
+
+    @Test
     @DisplayName("The conversions of only zero should not fail.")
     void conversion_which_does_not_fail_with_minimum() {
       int[] tuples = {0, 0, 0, 0, 0, 0, 0, 0};

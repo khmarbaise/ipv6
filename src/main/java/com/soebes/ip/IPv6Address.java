@@ -23,7 +23,7 @@ import org.apiguardian.api.API;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HexFormat;
-import java.util.function.Predicate;
+import java.util.function.IntPredicate;
 
 import static java.util.stream.Collectors.joining;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
@@ -159,9 +159,9 @@ public final class IPv6Address implements Comparator<IPv6Address> {
 
   }
 
-  private static Predicate<Integer> isGreaterOrEqualsZero = s -> s >= 0;
-  private static Predicate<Integer> isLessOrEqualsMaxValue = s -> s <= 0xffff;
-  private static Predicate<Integer> isInValidRange = isGreaterOrEqualsZero.and(isLessOrEqualsMaxValue);
+  private static final IntPredicate isGreaterOrEqualsZero = s -> s >= 0;
+  private static final IntPredicate isLessOrEqualsMaxValue = s -> s <= 0xffff;
+  private static final IntPredicate inValidRange = isGreaterOrEqualsZero.and(isLessOrEqualsMaxValue);
 
   /**
    * @param ip6 The eight tuples each 16 bit unsigned.
@@ -172,7 +172,7 @@ public final class IPv6Address implements Comparator<IPv6Address> {
     if (ip6.length != 8) {
       throw new IllegalArgumentException("There must be eight components.");
     }
-    var allValid = Arrays.stream(ip6).boxed().allMatch(isInValidRange);
+    var allValid = Arrays.stream(ip6).boxed().allMatch(inValidRange::test);
     if (!allValid) {
       throw new IllegalArgumentException("All values must be in the range from 0...65535 (0x000...0xffff)");
     }
