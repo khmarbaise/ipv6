@@ -22,6 +22,20 @@ import java.util.Comparator;
 import java.util.function.Function;
 
 public record IPv4Address(int t1, int t2, int t3, int t4) {
+
+  public IPv4Address {
+    validate(t1, "t1");
+    validate(t2, "t2");
+    validate(t3, "t3");
+    validate(t4, "t4");
+  }
+
+  private void validate(int value, String name) {
+    if (value > 255 || value < 0) {
+      throw new IllegalArgumentException("The valid range for " + name + " is 0..255");
+    }
+  }
+
   @Override
   public String toString() {
     return t1 + "." + t2 + "." + t3 + "." + t4;
