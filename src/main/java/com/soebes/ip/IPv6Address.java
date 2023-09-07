@@ -174,7 +174,7 @@ public final class IPv6Address implements Comparator<IPv6Address> {
     }
     var allValid = Arrays.stream(ip6).boxed().allMatch(inValidRange::test);
     if (!allValid) {
-      throw new IllegalArgumentException("All values must be in the range from 0...65535 (0x000...0xffff)");
+      throw new IllegalArgumentException("All values must be in the range from 0...65535 (0x0000...0xffff)");
     }
 
     return new IPv6Address(ip6);

@@ -193,8 +193,8 @@ class IPv6AddressTest {
 
     static Stream<Arguments> conversions_which_have_to_fail_with_exceptions() {
       return Stream.of(
-          of(new int[]{0, 0, 0, 0, 0, 0, 0, -1}, "All values must be in the range from 0...65535 (0x000...0xffff)"),
-          of(new int[]{0, 0, 0, 0, 0, 0, 0, 0x10000}, "All values must be in the range from 0...65535 (0x000...0xffff)"),
+          of(new int[]{0, 0, 0, 0, 0, 0, 0, -1}, "All values must be in the range from 0...65535 (0x0000...0xffff)"),
+          of(new int[]{0, 0, 0, 0, 0, 0, 0, 0x10000}, "All values must be in the range from 0...65535 (0x0000...0xffff)"),
           of(new int[]{0, 0, 0, 0, 0, 0, 0x10000}, "There must be eight components.")
       );
     }
