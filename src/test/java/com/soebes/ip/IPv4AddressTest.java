@@ -1,5 +1,6 @@
 package com.soebes.ip;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,5 +14,10 @@ class IPv4AddressTest {
     var second = ip.second16();
     assertThat(first).isEqualTo(0x80EA);
     assertThat(second).isEqualTo(0xC00C);
+  }
+
+  @Test
+  void verify() {
+    EqualsVerifier.forClass(IPv4Address.class).verify();
   }
 }
