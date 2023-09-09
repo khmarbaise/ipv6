@@ -19,6 +19,13 @@
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
+
+  <scm>
+    <connection>scm:git:https://github.com/khmarbaise/ipv6.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/khmarbaise/ipv6.git</developerConnection>
+    <url>https://github.com/khmarbaise/ipv6</url>
+  </scm>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
