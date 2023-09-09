@@ -38,3 +38,7 @@ jobs:
 
       - name: "Building with Maven."
         run: mvn verify -e -B -V --no-transfer-progress
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
