@@ -46,9 +46,9 @@ jobs:
       - name: 'Build'
         run: unset JAVA_TOOL_OPTIONS;mvn -V --no-transfer-progress verify site:site site:stage
       - name: 'Deploy to gh-pages'
-        uses: JamesIves/github-pages-deploy-action@releases/v4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
           folder: target/staging
+          branch: gh-pages
           target-folder: snapshot
 
