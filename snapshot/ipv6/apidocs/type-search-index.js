@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.soebes.ip","l":"IPv4Address"},{"p":"com.soebes.ip","l":"IPv6Address"}];updateSearchResults();
