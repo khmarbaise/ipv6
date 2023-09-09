@@ -46,6 +46,10 @@ jobs:
           java-version: 20
           distribution: 'temurin'
           cache: maven
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
       - name: 'Build'
         run: unset JAVA_TOOL_OPTIONS;mvn -V --no-transfer-progress verify site:site site:stage
       - name: 'Deploy to gh-pages'
