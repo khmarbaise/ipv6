@@ -36,8 +36,8 @@ JDK17+
 
 [source,java]
 ----
-var ip6Address = IPv6Address.from("FF01::101");
-var loopback = IPv6Address.from("::1");
+var ip6Address = IPv6Address.of("FF01::101");
+var loopback = IPv6Address.of("::1");
 ----
 The loopback can be done simpler like:
 [source,java]
@@ -48,16 +48,23 @@ There are also others like:
 [source,java]
 ----
 var unspecified_one = IPv6Address.UNSPECIFIED;
-var unspecified_two = IPv6Address.from("::");
+var unspecified_two = IPv6Address.of("::");
 ----
 
-[source,java]
+[source,jshelllanguage]
 ----
-var first = IPv6Address.from("2001:DB8:0:0:8:800:200C:417A");
-var second = IPv6Address.from("2001:DB8::8:800:200C:417A");
+var first = IPv6Address.of("2001:DB8:0:0:8:800:200C:417A");
+var second = IPv6Address.of("2001:DB8::8:800:200C:417A");
 
 assertThat(first.equals(second)).isTrue();
 ----
 
+
+== Mutation Testing
+
+[source,bash]
+----
+mvn clean verify org.pitest:pitest-maven:mutationCoverage
+----
 
 

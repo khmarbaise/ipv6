@@ -112,7 +112,7 @@ public final class IPv6Address implements Comparator<IPv6Address> {
    * @param ip6 The given string representation of an IP Version 6 address.
    * @return The instance of {@link IPv6Address}.
    */
-  public static IPv6Address from(String ip6) {
+  public static IPv6Address of(String ip6) {
     if (!ip6.matches("[0-9a-fA-F.:/]+")) {
       throw new IllegalArgumentException("Invalid characters only 0-9a-fA-F.:/ are allowed.");
     }
@@ -168,7 +168,7 @@ public final class IPv6Address implements Comparator<IPv6Address> {
    * @return An {@link IPv6Address}.
    * @throws IllegalArgumentException in case of failures.
    */
-  public static IPv6Address from(int[] ip6) {
+  public static IPv6Address of(int[] ip6) {
     if (ip6.length != 8) {
       throw new IllegalArgumentException("There must be eight components.");
     }
