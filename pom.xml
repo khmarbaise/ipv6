@@ -26,6 +26,13 @@
     <url>https://github.com/khmarbaise/ipv6</url>
   </scm>
 
+  <distributionManagement>
+    <site>
+      <id>site</id>
+      <url>https://github.com/khmarbaise/ipv6</url>
+    </site>
+  </distributionManagement>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
