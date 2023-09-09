@@ -53,5 +53,4 @@ jobs:
         with:
           folder: target/staging
           branch: gh-pages
-          target-folder: snapshot
 

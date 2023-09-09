@@ -14,7 +14,7 @@
   <groupId>com.soebes.examples</groupId>
   <artifactId>ipv6</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>File Analyzer</name>
+  <name>IPV6</name>
 
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
