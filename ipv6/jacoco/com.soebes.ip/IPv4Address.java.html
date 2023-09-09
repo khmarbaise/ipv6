@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IPv4Address.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">IPV6</a> &gt; <a href="index.source.html" class="el_package">com.soebes.ip</a> &gt; <span class="el_source">IPv4Address.java</span></div><h1>IPv4Address.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package com.soebes.ip;
+
+import java.util.Comparator;
+import java.util.function.Function;
+
+public record IPv4Address(int t1, int t2, int t3, int t4) {
+
+<span class="fc" id="L26">  public IPv4Address {</span>
+<span class="fc" id="L27">    validate(t1, &quot;t1&quot;);</span>
+<span class="fc" id="L28">    validate(t2, &quot;t2&quot;);</span>
+<span class="fc" id="L29">    validate(t3, &quot;t3&quot;);</span>
+<span class="fc" id="L30">    validate(t4, &quot;t4&quot;);</span>
+<span class="fc" id="L31">  }</span>
+
+  private void validate(int value, String name) {
+<span class="pc bpc" id="L34" title="2 of 4 branches missed.">    if (value &gt; 255 || value &lt; 0) {</span>
+<span class="nc" id="L35">      throw new IllegalArgumentException(&quot;The valid range for &quot; + name + &quot; is 0..255&quot;);</span>
+    }
+<span class="fc" id="L37">  }</span>
+
+  @Override
+  public String toString() {
+<span class="nc" id="L41">    return t1 + &quot;.&quot; + t2 + &quot;.&quot; + t3 + &quot;.&quot; + t4;</span>
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">    if (obj == this) return true;</span>
+<span class="fc bfc" id="L47" title="All 4 branches covered.">    if (obj == null || obj.getClass() != this.getClass()) return false;</span>
+<span class="fc" id="L48">    var that = (IPv4Address) obj;</span>
+<span class="fc bfc" id="L49" title="All 8 branches covered.">    return this.t1 == that.t1 &amp;&amp;</span>
+           this.t2 == that.t2 &amp;&amp;
+           this.t3 == that.t3 &amp;&amp;
+           this.t4 == that.t4;
+  }
+
+
+  public int first16() {
+<span class="fc" id="L57">    return (this.t1 &lt;&lt; 8) + this.t2;</span>
+  }
+
+  public int second16() {
+<span class="fc" id="L61">    return (this.t3 &lt;&lt; 8) + this.t4;</span>
+  }
+
+<span class="fc" id="L64">  static Comparator&lt;IPv4Address&gt; IP_ADDRESS_COMPARATOR = Comparator</span>
+<span class="fc" id="L65">      .comparingInt(IPv4Address::t1)</span>
+<span class="fc" id="L66">      .thenComparingInt(IPv4Address::t2)</span>
+<span class="fc" id="L67">      .thenComparingInt(IPv4Address::t3)</span>
+<span class="fc" id="L68">      .thenComparingInt(IPv4Address::t4);</span>
+
+<span class="fc" id="L70">  static Function&lt;String, IPv4Address&gt; toIpAddress = s -&gt; {</span>
+<span class="fc" id="L71">    var ipTuples = s.split(&quot;\\.&quot;);</span>
+<span class="fc" id="L72">    return new IPv4Address(</span>
+<span class="fc" id="L73">        Integer.parseInt(ipTuples[0]),</span>
+<span class="fc" id="L74">        Integer.parseInt(ipTuples[1]),</span>
+<span class="fc" id="L75">        Integer.parseInt(ipTuples[2]),</span>
+<span class="fc" id="L76">        Integer.parseInt(ipTuples[3])</span>
+    );
+  };
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

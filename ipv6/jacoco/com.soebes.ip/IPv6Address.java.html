@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IPv6Address.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">IPV6</a> &gt; <a href="index.source.html" class="el_package">com.soebes.ip</a> &gt; <span class="el_source">IPv6Address.java</span></div><h1>IPv6Address.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package com.soebes.ip;
+
+import org.apiguardian.api.API;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HexFormat;
+import java.util.function.IntPredicate;
+
+import static java.util.stream.Collectors.joining;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+
+/**
+ * Represents an IP Version 6 address.
+ *
+ * @author Karl Heinz Marbaise
+ * @implNote Currently using internally {@code int} instead of {@code short} or alike because
+ * it's easier to handle conversions from/to hex etc. without handling 2'th complements etc.
+ * @implNote Maybe we should reconsider to use {@code short} or {@code char} instead? Not sure yet.
+ * @see &lt;a href=&quot;https://datatracker.ietf.org/doc/html/rfc4291&quot;&gt;IP Version 6 Addressing Architecture&lt;/a&gt;
+ */
+@API(status = EXPERIMENTAL, since = &quot;0.0.1&quot;)
+public final class IPv6Address implements Comparator&lt;IPv6Address&gt; {
+
+  private final int[] tuples;
+
+  /**
+   * Only used for internal purposes.
+   */
+<span class="fc" id="L48">  private IPv6Address(int[] tuples) {</span>
+<span class="fc" id="L49">    this.tuples = tuples;</span>
+<span class="fc" id="L50">  }</span>
+
+  /**
+   * Only used for internal purposes.
+   */
+  @SuppressWarnings(&quot;java:S107&quot;)
+<span class="fc" id="L56">  private IPv6Address(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8) {</span>
+<span class="fc" id="L57">    this.tuples = new int[]{t1, t2, t3, t4, t5, t6, t7, t8};</span>
+<span class="fc" id="L58">  }</span>
+
+  /**
+   * The loopback address
+   *
+   * @link &lt;a href=&quot;https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.3&quot;&gt;The Loopback Address&lt;/a&gt;
+   */
+<span class="fc" id="L65">  public static final IPv6Address LOOPBACK = new IPv6Address(0, 0, 0, 0, 0, 0, 0, 1);</span>
+
+  /**
+   * The unspecified address is used to be compared to or as a default initialization.
+   *
+   * @link &lt;a href=&quot;https://datatracker.ietf.org/doc/html/rfc4291#section-2.5.2&quot;&gt;The Unspecified Address&lt;/a&gt;
+   */
+<span class="fc" id="L72">  public static final IPv6Address UNSPECIFIED = new IPv6Address(0, 0, 0, 0, 0, 0, 0, 0);</span>
+
+  public boolean isUnicastAddress() {
+<span class="nc" id="L75">    return false;</span>
+  }
+
+  public boolean isMulticastAddress() {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">    return (this.tuples[0] &amp; 0xff00) == 0xff00;</span>
+  }
+
+  /**
+   * @return true if the current IPv6 represents the {@link #LOOPBACK}, false otherwise.
+   */
+  public boolean isLoopbackAddress() {
+<span class="nc" id="L86">    return this.equals(LOOPBACK);</span>
+  }
+
+  /**
+   * @return true if the current IPv6 represents the {@link #UNSPECIFIED}, false otherwise.
+   */
+  public boolean isUnspecifiedAddress() {
+<span class="fc" id="L93">    return this.equals(UNSPECIFIED);</span>
+  }
+
+  private static final String ZERO_ABBREVIATION = &quot;::&quot;;
+
+  private static int[] convert(String x) {
+<span class="fc" id="L99">    var ipTuples = x.split(&quot;:&quot;);</span>
+<span class="fc" id="L100">    int[] digits = new int[ipTuples.length];</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">    for (int i = 0; i &lt; ipTuples.length; i++) {</span>
+<span class="fc" id="L102">      digits[i] = HexFormat.fromHexDigits(ipTuples[i]);</span>
+<span class="pc bpc" id="L103" title="1 of 4 branches missed.">      var isInvalid = digits[i] &lt; 0 || digits[i] &gt; 65535;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">      if (isInvalid) {</span>
+<span class="fc" id="L105">        throw new IllegalArgumentException(&quot;The valid range from 0...65535 is violated for [&quot; + i + &quot;]=&quot; + ipTuples[i]);</span>
+      }
+    }
+<span class="fc" id="L108">    return digits;</span>
+  }
+
+  /**
+   * @param ip6 The given string representation of an IP Version 6 address.
+   * @return The instance of {@link IPv6Address}.
+   */
+  public static IPv6Address of(String ip6) {
+<span class="fc bfc" id="L116" title="All 2 branches covered.">    if (!ip6.matches(&quot;[0-9a-fA-F.:/]+&quot;)) {</span>
+<span class="fc" id="L117">      throw new IllegalArgumentException(&quot;Invalid characters only 0-9a-fA-F.:/ are allowed.&quot;);</span>
+    }
+
+<span class="fc bfc" id="L120" title="All 2 branches covered.">    if (ip6.equals(ZERO_ABBREVIATION)) {</span>
+<span class="fc" id="L121">      return IPv6Address.UNSPECIFIED;</span>
+    }
+
+<span class="fc" id="L124">    var split = ip6.split(ZERO_ABBREVIATION);</span>
+
+<span class="fc bfc" id="L126" title="All 2 branches covered.">    if (split.length &gt; 2) {</span>
+<span class="fc" id="L127">      throw new IllegalArgumentException(&quot;Grouping with :: only allowed once.&quot;);</span>
+    }
+
+<span class="fc bfc" id="L130" title="All 2 branches covered.">    if (split.length == 2) {</span>
+<span class="fc" id="L131">      int[] result = new int[8];</span>
+
+<span class="fc" id="L133">      int[] digitsFirst = convert(split[0]);</span>
+
+      int[] digitsSecond;
+<span class="fc bfc" id="L136" title="All 2 branches covered.">      if (split[1].contains(&quot;.&quot;)) { //FIXME: Better checking</span>
+        // having an IP4 in there...
+<span class="fc" id="L138">        var ip4 = IPv4Address.toIpAddress.apply(split[1]);</span>
+<span class="fc" id="L139">        digitsSecond = new int[]{ip4.first16(), ip4.second16()};</span>
+<span class="fc" id="L140">      } else {</span>
+<span class="fc" id="L141">        digitsSecond = convert(split[1]);</span>
+      }
+
+<span class="fc" id="L144">      int pos = 7;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">      for (int i = digitsSecond.length - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L146">        result[pos--] = digitsSecond[i];</span>
+      }
+
+<span class="fc" id="L149">      pos -= (8 - digitsSecond.length - digitsFirst.length);</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">      for (int i = digitsFirst.length - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L151">        result[pos--] = digitsFirst[i];</span>
+      }
+
+<span class="fc" id="L154">      return new IPv6Address(result);</span>
+    } else {
+<span class="fc" id="L156">      int[] digits = convert(ip6);</span>
+<span class="fc" id="L157">      return new IPv6Address(digits);</span>
+    }
+
+  }
+
+<span class="fc bfc" id="L162" title="All 2 branches covered.">  private static final IntPredicate isGreaterOrEqualsZero = s -&gt; s &gt;= 0;</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">  private static final IntPredicate isLessOrEqualsMaxValue = s -&gt; s &lt;= 0xffff;</span>
+<span class="fc" id="L164">  private static final IntPredicate inValidRange = isGreaterOrEqualsZero.and(isLessOrEqualsMaxValue);</span>
+
+  /**
+   * @param ip6 The eight tuples each 16 bit unsigned.
+   * @return An {@link IPv6Address}.
+   * @throws IllegalArgumentException in case of failures.
+   */
+  public static IPv6Address of(int[] ip6) {
+<span class="fc bfc" id="L172" title="All 2 branches covered.">    if (ip6.length != 8) {</span>
+<span class="fc" id="L173">      throw new IllegalArgumentException(&quot;There must be eight components.&quot;);</span>
+    }
+<span class="fc" id="L175">    var allValid = Arrays.stream(ip6).boxed().allMatch(inValidRange::test);</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">    if (!allValid) {</span>
+<span class="fc" id="L177">      throw new IllegalArgumentException(&quot;All values must be in the range from 0...65535 (0x0000...0xffff)&quot;);</span>
+    }
+
+<span class="fc" id="L180">    return new IPv6Address(ip6);</span>
+  }
+
+  @Override
+  public int compare(IPv6Address o1, IPv6Address o2) {
+<span class="nc" id="L185">    return Arrays.compare(o1.tuples, o2.tuples);</span>
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+<span class="fc bfc" id="L190" title="All 2 branches covered.">    if (obj == this) return true;</span>
+<span class="pc bpc" id="L191" title="2 of 4 branches missed.">    if (obj == null || obj.getClass() != this.getClass()) return false;</span>
+<span class="fc" id="L192">    var that = (IPv6Address) obj;</span>
+<span class="fc" id="L193">    return Arrays.equals(this.tuples, that.tuples);</span>
+  }
+
+  @Override
+  public int hashCode() {
+<span class="nc" id="L198">    return Arrays.hashCode(this.tuples);</span>
+  }
+
+
+  @Override
+  public String toString() {
+<span class="fc" id="L204">    return Arrays.stream(tuples).boxed().map(v -&gt; HexFormat.of().withUpperCase().toHexDigits((short) v.intValue())).collect(joining(&quot;:&quot;));</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
