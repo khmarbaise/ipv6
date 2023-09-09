@@ -19,6 +19,10 @@ name: PULL_REQUEST
 
 on: [pull_request]
 
+permissions:
+  checks: write
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -49,18 +53,5 @@ jobs:
         with:
           check_name: "Publish Unit Test Results"
           comment_title: "Unit Test Results"
-          junit_files: |
-            ${{ github.workspace }}/itf-assertj/target/surefire-reports/TEST-*.xml
-            ${{ github.workspace }}/itf-extension-maven/target/surefire-reports/TEST-*.xml
-            ${{ github.workspace }}/itf-jupiter-extension/target/surefire-reports/TEST-*.xml
-
-      - name: "Publish Integration Test Results"
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2
-        if: always()
-        with:
-          check_name: "Publish Integration Test Results"
-          comment_title: "Integration Test Results"
-          junit_files: |
-            ${{ github.workspace }}/itf-examples/target/failsafe-reports/TEST-*.xml
-            ${{ github.workspace }}/itf-failure-plugin/target/failsafe-reports/TEST-*.xml
-            ${{ github.workspace }}/itf-maven-plugin/target/failsafe-reports/TEST-*.xml
+          files: |
+            ${{ github.workspace }}/target/surefire-reports/TEST-*.xml
